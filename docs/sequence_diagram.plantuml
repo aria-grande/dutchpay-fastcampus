@@ -1,0 +1,35 @@
+@startuml
+participant User
+participant "Web Client" as C
+participant "DutchPay Server" as S
+
+User -> C: GET /
+activate C
+C -> S: static asset 요청(HTML/CSS 등)
+activate S
+S --> C: HTML/CSS 등 응답
+deactivate S
+
+C -> C: 그룹 입력 페이지로 redirection
+C --> User:그룹 이름 입력 페이지
+
+User -> C: 1. 그룹 이름 입력 & 저장
+C -> C: store에 그룹 이름 저장
+C -> C: 그룹 멤버 추가 페이지로 redirection
+
+C -> User: 그룹 멤버 추가 페이지
+User -> C: 2. 그룹 멤버 이름 입력
+C -> C: store에 그룹 멤버 이름 저장
+C -> C: 비용 관리 페이지로 redirection
+C --> User: 비용 관리 페이지
+
+loop
+  User -> C: 3. 비용 정보 입력 & 추가
+  C -> C: store에 비용 정보 저장
+  C -> C: 정산 결과 계산
+  C -> User: 정산 결과 노출
+end
+
+deactivate C
+
+@enduml
