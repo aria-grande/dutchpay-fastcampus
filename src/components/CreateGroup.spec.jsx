@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecoilRoot } from 'recoil';
 import { CreateGroup } from './CreateGroup';
+
 const renderComponent = () => {
   render(
     <RecoilRoot>
@@ -11,7 +12,7 @@ const renderComponent = () => {
 
   const input = screen.getByPlaceholderText('2022 제주도 여행')
   const saveButton = screen.getByText('저장')
-  const errorMessage = screen.queryByText('그룹 이름을 입력해 주세요.')
+  const errorMessage = screen.getByText('그룹 이름을 입력해 주세요.')
 
   return {
     input,
