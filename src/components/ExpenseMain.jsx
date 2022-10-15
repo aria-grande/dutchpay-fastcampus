@@ -1,10 +1,12 @@
+import { AddExpenseForm } from "./AddExpenseForm"
+
 export const ExpenseMain = () => {
   return (
     <div>
       ExpenseMain component
       {/* Left pane */}
       <div>
-        {/* TODO: 비용 추가 폼 컴포넌트 렌더링 */}
+        <AddExpenseForm />
         {/* TODO: 정산 결과 컴포넌트 렌더링 */}
       </div>
       {/* Right pane */}
