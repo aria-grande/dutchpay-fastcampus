@@ -6,6 +6,7 @@ import { useState } from "react"
 import { groupNameState } from "../state/groupName"
 import { useNavigate } from "react-router-dom"
 import { ROUTES } from "../routes"
+import styled from "styled-components"
 
 export const AddMembers = () => {
   const [groupMembers, setGroupMembers] = useRecoilState(groupMembersState)
@@ -35,8 +36,12 @@ export const AddMembers = () => {
         onTags={(value) => setGroupMembers(value.values)}
       />
       {validated && groupMembers.length === 0 && (
-        <span>그룹 멤버들의 이름을 입력해 주세요.</span>
+        <StyledErrorMessage>그룹 멤버들의 이름을 입력해 주세요.</StyledErrorMessage>
       )}
     </CenteredOverlayForm>
   )
 }
+
+const StyledErrorMessage = styled.span`
+  color: red;
+`
