@@ -4,6 +4,8 @@ import styled from "styled-components"
 import { AddExpenseForm } from "./AddExpenseForm"
 import { ExpenseTable } from "./ExpenseTable"
 import { groupNameState } from "../state/groupName"
+import { SettlementSummary } from "./SettlementSummary"
+import { ServiceLogo } from "./shared/ServiceLogo"
 
 export const ExpenseMain = () => {
   return (
@@ -22,8 +24,17 @@ export const ExpenseMain = () => {
 
 const LeftPane = () => (
   <Container>
-    <AddExpenseForm />
-      {/* TODO: 정산 결과 컴포넌트 렌더링 */}
+    <StyledGapRow>
+      <Row>
+        <ServiceLogo />
+      </Row>
+      <Row>
+        <AddExpenseForm />
+      </Row>
+      <Row>
+        <SettlementSummary />
+      </Row>
+    </StyledGapRow>
   </Container>
 )
 
@@ -31,14 +42,14 @@ const LeftPane = () => (
 const RightPane = () => {
   const groupName = useRecoilValue(groupNameState)
   return (
-    <StyledContainer>
+    <StyledRightPaneWrapper>
       <Row>
         <StyledGroupName>{groupName || '그룹 이름'}</StyledGroupName>
       </Row>
       <Row>
         <ExpenseTable />
       </Row>
-    </StyledContainer>
+    </StyledRightPaneWrapper>
   )
 }
 
@@ -50,6 +61,12 @@ const StyledGroupName = styled.h2`
   text-align: center;
 `
 
-const StyledContainer = styled(Container)`
+const StyledRightPaneWrapper = styled(Container)`
   padding: 100px 31px 100px 31px;
+`
+
+const StyledGapRow = styled(Row)`
+  gap: 5vh;
+  padding-top: 100px;
+  justify-content: center;
 `
