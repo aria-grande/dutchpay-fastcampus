@@ -15,21 +15,29 @@ export const AddExpenseForm = () => {
   const [payer, setPayer] = useState(null)
   const [validated, setValidated] = useState(false)
 
-  const [descValid, setDescValid] = useState(false)
-  const [amountValid, setAmountValid] = useState(false)
-  const [payerValid, setPayerValid] = useState(false)
+  const [isDescValid, setIsDescValid] = useState(false)
+  const [isPayerValid, setIsPayerValid] = useState(false)
+  const [isAmountValid, setIsAmountValid] = useState(false)
 
   const setExpense = useSetRecoilState(expensesState)
 
+  const checkValidity = () => {
+    const descValid = desc.length > 0
+    const payerValid = payer !== null
+    const amountValid = amount > 0
+
+    setIsDescValid(descValid)
+    setIsPayerValid(payerValid)
+    setIsAmountValid(amountValid)
+
+    return descValid && payerValid && amountValid
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault()
+    event.stopPropagation()
 
-    setDescValid(desc.length > 0)
-    setPayerValid(payer != null)
-    setAmountValid(amount > 0)
-
-    const form = event.currentTarget
-    if (form.checkValidity()) {
+    if (checkValidity()) {
       const newExpense = {
         date,
         desc,
@@ -47,14 +55,13 @@ export const AddExpenseForm = () => {
 
   return (
     <StyledWrapper>
-      <Form noValidate validated={validated} onSubmit={handleSubmit}>
-        <StyleTitle>1. 비용 추가하기</StyleTitle>
+      <Form noValidate onSubmit={handleSubmit}>
+        <StyledTitle>1. 비용 추가하기</StyledTitle>
         <Row>
           <Col xs={12}>
             <StyledFormGroup>
               <Form.Control
                 type="date"
-                name="expenseDate"
                 placeholder="결제한 날짜를 선택해 주세요"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
@@ -67,17 +74,17 @@ export const AddExpenseForm = () => {
             <StyledFormGroup>
               <Form.Control
                 type="text"
-                required
-                name="expenseDescription"
+                isInvalid={!isDescValid && validated}
+                isValid={isDescValid}
                 placeholder="비용에 대한 설명을 입력해 주세요"
                 value={desc}
                 onChange={({target}) => setDesc(target.value)}
               />
               <Form.Control.Feedback
                 type="invalid"
-                data-valid={descValid}
+                data-valid={isDescValid}
               >
-                  비용 내용을 입력해 주셔야 합니다.</Form.Control.Feedback>
+                비용 내용을 입력해 주셔야 합니다.</Form.Control.Feedback>
             </StyledFormGroup>
           </Col>
         </Row>
@@ -86,24 +93,24 @@ export const AddExpenseForm = () => {
             <StyledFormGroup>
               <Form.Control
                 type="number"
-                required
-                name="expenseAmount"
                 placeholder="비용은 얼마였나요?"
                 value={amount}
-                onChange={({target}) => setAmount(target.value)}
+                isInvalid={!isAmountValid && validated}
+                isValid={isAmountValid}
+                onChange={({target}) => setAmount(parseInt(target.value || 0))}
               />
               <Form.Control.Feedback
-                data-valid={amountValid}
+                data-valid={isAmountValid}
                 type="invalid"
               >
-                금액을 입력해 주셔야 합니다.</Form.Control.Feedback>
+                1원 이상의 금액을 입력해 주셔야 합니다.</Form.Control.Feedback>
             </StyledFormGroup>
           </Col>
           <Col xs={12} lg={6}>
             <StyledFormGroup>
               <Form.Select
-                required
-                name="expensePayer"
+                isValid={isPayerValid}
+                isInvalid={!isPayerValid && validated}
                 defaultValue=""
                 className="form-control"
                 onChange={({target}) => setPayer(target.value)}
@@ -111,10 +118,10 @@ export const AddExpenseForm = () => {
                 <option disabled value="">누가 결제 했나요?</option>
                 {members.map(member =>
                   <option key={member} value={member}>{member}</option>
-                  )}
+                )}
               </Form.Select>
               <Form.Control.Feedback
-                data-valid={payerValid}
+                data-valid={isPayerValid}
                 type="invalid"
               >결제자를 선택해 주셔야 합니다.</Form.Control.Feedback>
             </StyledFormGroup>
@@ -159,7 +166,7 @@ const StyledFormGroup = styled(Form.Group)`
     }
   }
 `
-const StyleTitle = styled.h3`
+export const StyledTitle = styled.h3`
   color: #FFFBFB;
   text-align: center;
   font-weight: 700;
