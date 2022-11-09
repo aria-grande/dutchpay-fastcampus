@@ -1,3 +1,7 @@
+import { toPng } from "html-to-image"
+import { useRef } from "react"
+import { Button } from "react-bootstrap"
+import { Download } from "react-bootstrap-icons"
 import { useRecoilValue } from "recoil"
 import styled from "styled-components"
 import { expensesState } from "../state/expenses"
@@ -67,6 +71,7 @@ export const calculateMinimumTransaction = (expenses, members, amountPerPerson) 
 }
 
 export const SettlementSummary = () => {
+  const wrapperElement = useRef(null)
   const expenses = useRecoilValue(expensesState)
   const members = useRecoilValue(groupMembersState)
 
@@ -76,8 +81,28 @@ export const SettlementSummary = () => {
 
   const minimumTransaction = calculateMinimumTransaction(expenses, members, splitAmount)
 
+  const exportToImage = () => {
+    if (wrapperElement.current === null) {
+      return
+    }
+
+    toPng(wrapperElement.current, {
+      filter: (node) => node.tagName !== 'BUTTON',
+    })
+      .then((dataURL) => {
+        const link = document.createElement('a')
+        link.download = 'settlement-summary.png'
+        link.href = dataURL
+
+        link.click()
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+
+  }
   return (
-    <StyledWrapper>
+    <StyledWrapper ref={wrapperElement}>
       <StyledTitle>2. 정산은 이렇게!</StyledTitle>
       { totalExpenseAmount > 0 && groupMembersCount > 0 && (
         <>
@@ -94,12 +119,28 @@ export const SettlementSummary = () => {
               </li>
             )}
           </StyledUl>
+          <StyledButton data-testid="btn-download" onClick={exportToImage}>
+            <Download />
+          </StyledButton>
         </>
       )}
     </StyledWrapper>
   )
 }
 
+const StyledButton = styled(Button)`
+  background: none;
+  border: none;
+  font-size: 25px;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+
+  &:hover, &:active {
+    background: none;
+    color: #683BA1;
+  }
+`
 const StyledWrapper = styled.div`
   padding: 50px;
   background-color: #683BA1;
@@ -108,6 +149,7 @@ const StyledWrapper = styled.div`
   border-radius: 15px;
   text-align: center;
   font-size: 22px;
+  position: relative;
 `
 
 const StyledUl = styled.ul`
