@@ -11,7 +11,7 @@ export const ExpenseMain = () => {
   return (
     <Container fluid>
       <Row>
-        <Col xs={12} sm={5} md={4}>
+        <Col xs={12} sm={5} md={5}>
           <LeftPane />
         </Col>
         <Col>
