@@ -22,7 +22,7 @@ const renderComponent = () => {
 
   const descErrorMessage = screen.getByText('비용 내용을 입력해 주셔야 합니다.')
   const payerErrorMessage = screen.getByText('결제자를 선택해 주셔야 합니다.')
-  const amountErrorMessage = screen.getByText('금액을 입력해 주셔야 합니다.')
+  const amountErrorMessage = screen.getByText('1원 이상의 금액을 입력해 주셔야 합니다.')
 
   return {
     dateInput,
@@ -101,9 +101,12 @@ describe('비용 정산 메인 페이지', () => {
       await userEvent.selectOptions(payerInput, '영수')
       await userEvent.click(addButton)
     }
-    test('날짜, 내용, 결제자, 금액 데이터가 정산 리스트에 추가 된다', async () => {
-      await addNewExpense()
 
+    beforeEach(async () => {
+      await addNewExpense()
+    })
+
+    test('날짜, 내용, 결제자, 금액 데이터가 정산 리스트에 추가 된다', () => {
       const expenseListComponent = screen.getByTestId('expenseList')
       const dateValue = within(expenseListComponent).getByText('2022-10-10')
       expect(dateValue).toBeInTheDocument()
@@ -114,18 +117,31 @@ describe('비용 정산 메인 페이지', () => {
       const payerValue = within(expenseListComponent).getByText('영수')
       expect(payerValue).toBeInTheDocument()
 
-      const amountValue = within(expenseListComponent).getByText('7000 원')
+      const amountValue = within(expenseListComponent).getByText('30000 원')
       expect(amountValue).toBeInTheDocument()
     })
 
-    test('정산 결과 또한 업데이트가 된다.', async () => {
-      await addNewExpense()
-
+    test('정산 결과 또한 업데이트가 된다.', () => {
       const totalText = screen.getByText(/2 명이서 총 30000 원 지출/i)
       expect(totalText).toBeInTheDocument()
 
       const transactionText = screen.getByText(/영희가 영수에게 15000 원 보내기/i)
       expect(transactionText).toBeInTheDocument()
+    })
+
+    const htmlToImage = require('html-to-image')
+    test('정산 결과를 이미지 파일로 저장할 수 있다', async () => {
+      const spiedToPng = jest.spyOn(htmlToImage, 'toPng')
+
+      const downloadBtn = screen.getByTestId("btn-download")
+      expect(downloadBtn).toBeInTheDocument()
+
+      await userEvent.click(downloadBtn)
+      expect(spiedToPng).toHaveBeenCalledTimes(1)
+    })
+
+    afterEach(() => {
+      jest.resetAllMocks()
     })
   })
 })
