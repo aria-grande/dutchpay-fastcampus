@@ -40,7 +40,7 @@ app.use(function (req, res, next) {
 })
 
 /*****************************************
- * HTTP Get method for get single object *
+ * HTTP Get method for get single object -- 그룹 정보 읽기 API *
  *****************************************/
 app.get(path + hashKeyPath, function (req, res) {
   let getItemParams = {
