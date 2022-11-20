@@ -16,7 +16,7 @@ Amplify.configure(awsmobile)
 const App = () => (
   <BrowserRouter>
     <RecoilRoot>
-      <RecoilDevTools forceSerialize={false} />.
+      <RecoilDevTools forceSerialize={false} />
       <Routes>
         <Route path="/" element={<Navigate to={ROUTES.CREATE_GROUP} />} />
         <Route path={ROUTES.CREATE_GROUP} element={<CreateGroup />} />
