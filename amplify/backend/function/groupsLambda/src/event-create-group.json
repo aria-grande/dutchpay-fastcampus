@@ -1,8 +1,0 @@
-{
-  "httpMethod": "POST",
-  "path": "/groups",
-  "headers": {
-    "Content-Type": "application/json"
-  },
-  "body": "{\"groupName\":\"Jeju testing\"}"
-}

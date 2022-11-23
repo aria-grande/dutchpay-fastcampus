@@ -1,44 +1,27 @@
 import { InputTags } from "react-bootstrap-tagsinput"
-import { useSetRecoilState } from "recoil"
+import { useRecoilState, useRecoilValue } from "recoil"
 import { CenteredOverlayForm } from "./shared/CenteredOverlayForm"
 import { groupMembersState } from "../state/groupMembers"
 import { useState } from "react"
+import { groupNameState } from "../state/groupName"
 import { useNavigate } from "react-router-dom"
-import { ROUTE_UTILS } from "../routes"
+import { ROUTES } from "../routes"
 import styled from "styled-components"
 import { Form } from "react-bootstrap"
-import { API } from "aws-amplify"
-import { useGroupData } from "../hooks/useGroupData"
 
 export const AddMembers = () => {
-  const { groupId, groupName, groupMembers } = useGroupData()
+  const [groupMembers, setGroupMembers] = useRecoilState(groupMembersState)
+  const groupName = useRecoilValue(groupNameState)
   const [groupMembersString, setGroupMembersString] = useState('')
-  const setGroupMembers = useSetRecoilState(groupMembersState)
   const [validated, setValidated] = useState(false)
   const navigate = useNavigate()
-
-  const saveGroupMembers = () => {
-    API.put('groupsApi', `/groups/${groupId}/members`, {
-      body: {
-        members: groupMembers
-      }
-    })
-      .then(_response => {
-        navigate(ROUTE_UTILS.EXPENSE_MAIN(groupId))
-      })
-      .catch(({ response }) => {
-        alert(response)
-      })
-  }
 
   const handleSubmit = (event) => {
     event.preventDefault()
     setValidated(true)
     if (groupMembers.length > 0) {
-      saveGroupMembers()
-      navigate(ROUTE_UTILS.EXPENSE_MAIN(groupId))
+      navigate(ROUTES.EXPENSE_MAIN)
     } else if (isSamsungInternet && groupMembersString.length > 0) {
-      saveGroupMembers()
       setGroupMembers(groupMembersString.split(','))
     }
   }
@@ -60,7 +43,6 @@ export const AddMembers = () => {
         />
      :
         <InputTags
-            values={groupMembers}
             data-testid="input-member-names"
             placeholder="이름 간 띄어 쓰기"
             onTags={(value) => setGroupMembers(value.values)}

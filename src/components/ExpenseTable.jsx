@@ -8,7 +8,7 @@ export const ExpenseTable = () => {
   const expenses = useRecoilValue(expensesState)
   return (
     <OverlayWrapper minHeight={"73vh"}>
-      <StyledTable data-testid="expenseList" borderless hover responsive>
+      <Table data-testid="expenseList" borderless hover responsive>
         <StyledThead>
           <tr>
             <th>날짜</th>
@@ -27,14 +27,10 @@ export const ExpenseTable = () => {
           </tr>
         ))}
         </StyledBody>
-      </StyledTable>
+      </Table>
     </OverlayWrapper>
   )
 }
-
-const StyledTable = styled(Table)`
-  min-width: 450px;
-`
 
 const StyledThead = styled.thead`
   color: #6B3DA6;
