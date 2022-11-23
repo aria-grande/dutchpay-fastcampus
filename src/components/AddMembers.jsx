@@ -4,7 +4,7 @@ import { CenteredOverlayForm } from "./shared/CenteredOverlayForm"
 import { groupMembersState } from "../state/groupMembers"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { ROUTE_UTILS, ROUTES } from "../routes"
+import { ROUTE_UTILS } from "../routes"
 import styled from "styled-components"
 import { Form } from "react-bootstrap"
 import { API } from "aws-amplify"
@@ -35,11 +35,12 @@ export const AddMembers = () => {
     event.preventDefault()
     setValidated(true)
     if (groupMembers.length > 0) {
-      navigate(ROUTES.EXPENSE_MAIN)
+      saveGroupMembers()
+      navigate(ROUTE_UTILS.EXPENSE_MAIN(groupId))
     } else if (isSamsungInternet && groupMembersString.length > 0) {
+      saveGroupMembers()
       setGroupMembers(groupMembersString.split(','))
     }
-    saveGroupMembers()
   }
 
   const isSamsungInternet = window.navigator.userAgent.includes('SAMSUNG')
