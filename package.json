@@ -5,7 +5,6 @@
   "dependencies": {
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "aws-amplify": "^4.3.43",
     "bootstrap": "^5.2.2",
     "bootstrap-icons": "^1.9.1",
     "html-to-image": "^1.10.8",
