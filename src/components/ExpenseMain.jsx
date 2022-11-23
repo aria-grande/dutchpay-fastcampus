@@ -6,11 +6,8 @@ import { ExpenseTable } from "./ExpenseTable"
 import { groupNameState } from "../state/groupName"
 import { SettlementSummary } from "./SettlementSummary"
 import { ServiceLogo } from "./shared/ServiceLogo"
-import { useGroupData } from "../hooks/useGroupData"
 
 export const ExpenseMain = () => {
-  useGroupData()
-  
   return (
     <Container fluid>
       <Row>
