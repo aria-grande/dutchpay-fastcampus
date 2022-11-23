@@ -1,0 +1,8 @@
+{
+  "httpMethod": "PUT",
+  "path": "/groups/d5798120-5ea8-11ed-9bdc-13f87772284b/expenses",
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": "{\"expense\":{\"payer\": \"A\", \"amount\": 10000}}"
+}
