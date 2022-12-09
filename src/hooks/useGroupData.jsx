@@ -6,6 +6,7 @@ import { groupNameState } from "../state/groupName"
 import { groupIdState } from "../state/groupId"
 import { groupMembersState } from "../state/groupMembers"
 import { expensesState } from "../state/expenses"
+import { currencyCodeState } from "../state/currency"
 
 export const useGroupData = () => {
   const { guid } = useParams()
@@ -13,12 +14,14 @@ export const useGroupData = () => {
   const [groupId, setGroupId] = useRecoilState(groupIdState)
   const [groupMembers, setMembers] = useRecoilState(groupMembersState)
   const [expenses, setExpenses] = useRecoilState(expensesState)
+  const [currencyCode, setCurrencyCode] = useRecoilState(currencyCodeState)
 
   const fetchAndSetGroupData = () => {
     API.get('groupsApi', `/groups/${guid}`)
       .then(({data}) => {
         setGroupName(data.groupName)
         setGroupId(data.guid)
+        setCurrencyCode(data.currencyCode)
         setMembers(data.members)
         setExpenses(data.expenses || [])
       })
@@ -37,8 +40,8 @@ export const useGroupData = () => {
   return {
     groupId,
     groupName,
+    currencyCode,
     groupMembers,
     expenses,
   }
-
 }

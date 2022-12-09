@@ -8,6 +8,7 @@ import { SettlementSummary } from "./SettlementSummary"
 import { ServiceLogo } from "./shared/ServiceLogo"
 import { useGroupData } from "../hooks/useGroupData"
 import { ShareFill } from "react-bootstrap-icons"
+import { CurrencySetter } from "./CurrencySetter"
 
 export const ExpenseMain = () => {
   useGroupData()
@@ -24,11 +25,11 @@ export const ExpenseMain = () => {
       })
     }
   }
-  
+
   return (
     <Container fluid>
       <Row>
-        <Col xs={12} sm={5} md={5}>
+        <Col xs={12} sm={5} md={4}>
           <LeftPane />
         </Col>
         <Col>
@@ -36,7 +37,7 @@ export const ExpenseMain = () => {
         </Col>
       </Row>
 
-      <StyledShareButton data-testId="share-btn" onClick={handleSharing}><ShareFill /></StyledShareButton>
+      <StyledShareButton data-testid="share-btn" onClick={handleSharing}><ShareFill /></StyledShareButton>
     </Container>
   )
 }
@@ -46,6 +47,9 @@ const LeftPane = () => (
     <StyledGapRow>
       <Row>
         <ServiceLogo />
+      </Row>
+      <Row>
+        <CurrencySetter />
       </Row>
       <Row>
         <AddExpenseForm />
@@ -75,33 +79,47 @@ const RightPane = () => {
 const StyledShareButton = styled.div`
   border-radius: 50%;
   background-color: #6B3DA6;
-
   position: fixed;
   width: 55px;
   height: 55px;
   right: 40px;
   bottom: 45px;
-
   filter: drop-shadow(4px 4px 6px rgba(0, 0, 0, 0.25));
-
   color: white;
   font-size: 30px;
   text-align: center;
+
+  svg {
+    padding-right: 3px;
+    padding-top: 3px;
+  }
 `
 const StyledGroupName = styled.h2`
   margin-bottom: 80px;
   font-weight: 700;
-  font-size: 48px;
-  line-height: 48px;
+  font-size: 45px;
+  line-height: 45px;
   text-align: center;
+  @media screen and (max-width: 600px) {
+    font-size: 10vw;
+    margin-bottom: 30px;
+  }
 `
 
 const StyledRightPaneWrapper = styled(Container)`
   padding: 100px 31px 100px 31px;
+
+  @media screen and (max-width: 600px) {
+    padding: 50px 25px;
+  }
 `
 
 const StyledGapRow = styled(Row)`
   gap: 5vh;
   padding-top: 100px;
   justify-content: center;
+
+  @media screen and (max-width: 600px) {
+    padding-top: 30px;
+  }
 `

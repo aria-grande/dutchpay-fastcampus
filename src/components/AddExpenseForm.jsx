@@ -12,7 +12,7 @@ export const AddExpenseForm = () => {
   const guid = useRecoilValue(groupIdState)
 
   const today = new Date()
-  const [date, setDate] = useState([today.getFullYear(), today.getMonth() + 1, today.getDate()].join("-"))
+  const [date, setDate] = useState([today.getFullYear(), today.getMonth() + 1, `0${today.getDate()}`.slice(-2)].join("-"))
   const [desc, setDesc] = useState('')
   const [amount,setAmount] = useState(0)
   const [payer, setPayer] = useState(null)
@@ -100,7 +100,8 @@ export const AddExpenseForm = () => {
                 type="invalid"
                 data-valid={isDescValid}
               >
-                비용 내용을 입력해 주셔야 합니다.</Form.Control.Feedback>
+                비용 내용을 입력해 주셔야 합니다.
+              </Form.Control.Feedback>
             </StyledFormGroup>
           </Col>
         </Row>
@@ -109,11 +110,12 @@ export const AddExpenseForm = () => {
             <StyledFormGroup>
               <Form.Control
                 type="number"
+                step="0.01"
                 placeholder="비용은 얼마였나요?"
                 value={amount}
                 isInvalid={!isAmountValid && validated}
                 isValid={isAmountValid}
-                onChange={({target}) => setAmount(parseInt(target.value || 0))}
+                onChange={({target}) => setAmount(target.value || 0)}
               />
               <Form.Control.Feedback
                 data-valid={isAmountValid}
@@ -132,7 +134,7 @@ export const AddExpenseForm = () => {
                 onChange={({target}) => setPayer(target.value)}
               >
                 <option disabled value="">누가 결제 했나요?</option>
-                {members.map(member =>
+                {members && members.map(member =>
                   <option key={member} value={member}>{member}</option>
                 )}
               </Form.Select>
@@ -154,7 +156,7 @@ export const AddExpenseForm = () => {
 }
 
 const StyledWrapper = styled.div`
-  padding: 50px;
+  padding: 40px;
   background-color: #683BA1;
   box-shadow: 3px 0px 4px rgba(0, 0, 0, 0.25);
   border-radius: 15px;
@@ -186,10 +188,13 @@ export const StyledTitle = styled.h3`
   color: #FFFBFB;
   text-align: center;
   font-weight: 700;
-  font-size: 40px;
+  font-size: 35px;
   line-height: 48px;
   letter-spacing: 0.25px;
   margin-bottom: 15px;
+  @media screen and (max-width: 600px) {
+    font-size: 8vw;
+  }
 `
 const StyledSubmitButton = styled(Button).attrs({
   type: 'submit'

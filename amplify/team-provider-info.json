@@ -15,7 +15,7 @@
       "function": {
         "groupsLambda": {
           "deploymentBucketName": "amplify-amplifyc1aada8bfeb84-staging-85747-deployment",
-          "s3Key": "amplify-builds/groupsLambda-4e745a69366375764777-build.zip"
+          "s3Key": "amplify-builds/groupsLambda-3971356c515031756945-build.zip"
         },
         "groups": {}
       },
@@ -24,6 +24,25 @@
       },
       "api": {
         "groupsApi": {}
+      }
+    }
+  },
+  "main": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-dutchpayfastcampus-main-03354-authRole",
+      "UnauthRoleArn": "arn:aws:iam::975115370226:role/amplify-dutchpayfastcampus-main-03354-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::975115370226:role/amplify-dutchpayfastcampus-main-03354-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-dutchpayfastcampus-main-03354-deployment",
+      "UnauthRoleName": "amplify-dutchpayfastcampus-main-03354-unauthRole",
+      "StackName": "amplify-dutchpayfastcampus-main-03354",
+      "StackId": "arn:aws:cloudformation:us-east-1:975115370226:stack/amplify-dutchpayfastcampus-main-03354/91ff9fc0-6b09-11ed-97ac-12584d16e9a7",
+      "AmplifyAppId": "d1wk2e4ayw7yzt"
+    },
+    "categories": {
+      "function": {
+        "groupsLambda": {},
+        "groups": {}
       }
     }
   }

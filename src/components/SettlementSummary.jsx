@@ -7,11 +7,12 @@ import styled from "styled-components"
 import { expensesState } from "../state/expenses"
 import { groupMembersState } from "../state/groupMembers"
 import { StyledTitle } from "./AddExpenseForm"
+import { getDescriptiveAmount } from "../util.js"
+import { currencyState } from "../state/currency"
 
 export const calculateMinimumTransaction = (expenses, members, amountPerPerson) => {
   const minTransactions = []
-
-  if (amountPerPerson === 0) {
+  if (!expenses || !members || !amountPerPerson || amountPerPerson === 0) {
     return minTransactions
   }
 
@@ -74,9 +75,10 @@ export const SettlementSummary = () => {
   const wrapperElement = useRef(null)
   const expenses = useRecoilValue(expensesState)
   const members = useRecoilValue(groupMembersState)
+  const currency = useRecoilValue(currencyState)
 
   const totalExpenseAmount = parseInt(expenses.reduce((prevAmount, curExpense) => prevAmount + parseInt(curExpense.amount), 0))
-  const groupMembersCount = members.length
+  const groupMembersCount = members ? members.length : 0
   const splitAmount = totalExpenseAmount / groupMembersCount
 
   const minimumTransaction = calculateMinimumTransaction(expenses, members, splitAmount)
@@ -107,15 +109,15 @@ export const SettlementSummary = () => {
       { totalExpenseAmount > 0 && groupMembersCount > 0 && (
         <>
           <StyledSummary>
-            <span>{groupMembersCount} 명이서 총 {totalExpenseAmount} 원 지출</span>
+            <span>{groupMembersCount} 명이서 총 {getDescriptiveAmount(currency, totalExpenseAmount)} 지출</span>
             <br/>
-            <span>한 사람 당 {splitAmount} 원</span>
+            <span>한 사람 당 {getDescriptiveAmount(currency, splitAmount)}</span>
           </StyledSummary>
 
           <StyledUl>
             {minimumTransaction.map(({ sender, receiver, amount}, index) =>
               <li key={`transaction-${index}`}>
-                <span>{sender}가 {receiver}에게 {amount} 원 보내기</span>
+                <span>{sender} → {receiver} : {getDescriptiveAmount(currency, amount)}</span>
               </li>
             )}
           </StyledUl>
@@ -142,7 +144,7 @@ const StyledButton = styled(Button)`
   }
 `
 const StyledWrapper = styled.div`
-  padding: 50px;
+  padding: 40px;
   background-color: #683BA1;
   color: #FFFBFB;
   box-shadow: 3px 0px 4px rgba(0, 0, 0, 0.25);

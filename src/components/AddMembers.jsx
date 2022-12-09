@@ -65,7 +65,7 @@ export const AddMembers = () => {
             placeholder="이름 간 띄어 쓰기"
             onTags={(value) => setGroupMembers(value.values)}
           />
-      } 
+      }
       {validated && groupMembers.length === 0 && (
         <StyledErrorMessage>그룹 멤버들의 이름을 입력해 주세요.</StyledErrorMessage>
       )}
