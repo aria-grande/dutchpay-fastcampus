@@ -8,6 +8,7 @@ import { SettlementSummary } from "./SettlementSummary"
 import { ServiceLogo } from "./shared/ServiceLogo"
 import { useGroupData } from "../hooks/useGroupData"
 import { ShareFill } from "react-bootstrap-icons"
+import { CurrencySetter } from "./CurrencySetter"
 
 export const ExpenseMain = () => {
   useGroupData()
@@ -24,7 +25,7 @@ export const ExpenseMain = () => {
       })
     }
   }
-  
+
   return (
     <Container fluid>
       <Row>
@@ -36,7 +37,7 @@ export const ExpenseMain = () => {
         </Col>
       </Row>
 
-      <StyledShareButton data-testId="share-btn" onClick={handleSharing}><ShareFill /></StyledShareButton>
+      <StyledShareButton data-testid="share-btn" onClick={handleSharing}><ShareFill /></StyledShareButton>
     </Container>
   )
 }
@@ -46,6 +47,9 @@ const LeftPane = () => (
     <StyledGapRow>
       <Row>
         <ServiceLogo />
+      </Row>
+      <Row>
+        <CurrencySetter />
       </Row>
       <Row>
         <AddExpenseForm />

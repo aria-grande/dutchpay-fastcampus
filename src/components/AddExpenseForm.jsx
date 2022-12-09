@@ -12,7 +12,7 @@ export const AddExpenseForm = () => {
   const guid = useRecoilValue(groupIdState)
 
   const today = new Date()
-  const [date, setDate] = useState([today.getFullYear(), today.getMonth() + 1, today.getDate()].join("-"))
+  const [date, setDate] = useState([today.getFullYear(), today.getMonth() + 1, `0${today.getDate()}`.slice(-2)].join("-"))
   const [desc, setDesc] = useState('')
   const [amount,setAmount] = useState(0)
   const [payer, setPayer] = useState(null)
@@ -100,7 +100,8 @@ export const AddExpenseForm = () => {
                 type="invalid"
                 data-valid={isDescValid}
               >
-                비용 내용을 입력해 주셔야 합니다.</Form.Control.Feedback>
+                비용 내용을 입력해 주셔야 합니다.
+              </Form.Control.Feedback>
             </StyledFormGroup>
           </Col>
         </Row>
@@ -109,6 +110,7 @@ export const AddExpenseForm = () => {
             <StyledFormGroup>
               <Form.Control
                 type="number"
+                step="0.01"
                 placeholder="비용은 얼마였나요?"
                 value={amount}
                 isInvalid={!isAmountValid && validated}
@@ -132,7 +134,7 @@ export const AddExpenseForm = () => {
                 onChange={({target}) => setPayer(target.value)}
               >
                 <option disabled value="">누가 결제 했나요?</option>
-                {members.map(member =>
+                {members && members.map(member =>
                   <option key={member} value={member}>{member}</option>
                 )}
               </Form.Select>

@@ -26,8 +26,9 @@ export const CreateGroup = () => {
       setGroupId(guid)
       navigate(ROUTE_UTILS.ADD_MEMBERS(guid))
     })
-    .catch(({ response }) => {
-      alert(response.data.error)
+    .catch((error) => {
+      console.error(error)
+      alert(error.response.data.error)
     })
   }
 

@@ -22,9 +22,7 @@ if (process.env.ENV && process.env.ENV !== "NONE") {
 }
 
 const partitionKeyName = "guid"
-const partitionKeyType = "S"
 const path = "/groups"
-const UNAUTH = "UNAUTH"
 const hashKeyPath = "/:" + partitionKeyName
 
 // declare a new express app
@@ -57,6 +55,41 @@ app.get(path + hashKeyPath, function (req, res) {
       res.json({ error: "Item not found" })
     } else {
       res.json({ data: data.Item })
+    }
+  })
+})
+
+/************************************
+ * HTTP put method for adding an expense to the group - 결제 통화 설정 API *
+ *************************************/
+app.put(`${path}${hashKeyPath}/currencyCode`, function (req, res) {
+  const guid = req.params[partitionKeyName]
+  const { currencyCode } = req.body
+
+  if (!currencyCode) {
+    res.statusCode = 400
+    res.json({ error: "Invalid currency code" })
+    return
+  }
+
+  let updateItemParams = {
+    TableName: tableName,
+    Key: {
+      [partitionKeyName]: guid,
+    },
+    UpdateExpression: "SET currencyCode = :currencyCode",
+    ExpressionAttributeValues: {
+      ":currencyCode": currencyCode,
+    },
+  }
+
+  dynamodb.update(updateItemParams, (err, data) => {
+    if (err) {
+      res.statusCode = 500
+      res.json({ error: err })
+    } else {
+      res.statusCode = 200
+      res.json({ data: data })
     }
   })
 })
