@@ -156,7 +156,7 @@ export const AddExpenseForm = () => {
 }
 
 const StyledWrapper = styled.div`
-  padding: 50px;
+  padding: 40px;
   background-color: #683BA1;
   box-shadow: 3px 0px 4px rgba(0, 0, 0, 0.25);
   border-radius: 15px;
@@ -188,10 +188,13 @@ export const StyledTitle = styled.h3`
   color: #FFFBFB;
   text-align: center;
   font-weight: 700;
-  font-size: 40px;
+  font-size: 35px;
   line-height: 48px;
   letter-spacing: 0.25px;
   margin-bottom: 15px;
+  @media screen and (max-width: 600px) {
+    font-size: 8vw;
+  }
 `
 const StyledSubmitButton = styled(Button).attrs({
   type: 'submit'

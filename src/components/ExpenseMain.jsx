@@ -79,33 +79,47 @@ const RightPane = () => {
 const StyledShareButton = styled.div`
   border-radius: 50%;
   background-color: #6B3DA6;
-
   position: fixed;
   width: 55px;
   height: 55px;
   right: 40px;
   bottom: 45px;
-
   filter: drop-shadow(4px 4px 6px rgba(0, 0, 0, 0.25));
-
   color: white;
   font-size: 30px;
   text-align: center;
+
+  svg {
+    padding-right: 3px;
+    padding-top: 3px;
+  }
 `
 const StyledGroupName = styled.h2`
   margin-bottom: 80px;
   font-weight: 700;
-  font-size: 48px;
-  line-height: 48px;
+  font-size: 45px;
+  line-height: 45px;
   text-align: center;
+  @media screen and (max-width: 600px) {
+    font-size: 10vw;
+    margin-bottom: 30px;
+  }
 `
 
 const StyledRightPaneWrapper = styled(Container)`
   padding: 100px 31px 100px 31px;
+
+  @media screen and (max-width: 600px) {
+    padding: 50px 25px;
+  }
 `
 
 const StyledGapRow = styled(Row)`
   gap: 5vh;
   padding-top: 100px;
   justify-content: center;
+
+  @media screen and (max-width: 600px) {
+    padding-top: 30px;
+  }
 `

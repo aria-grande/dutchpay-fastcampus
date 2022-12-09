@@ -118,7 +118,7 @@ export const SettlementSummary = () => {
           <StyledUl>
             {minimumTransaction.map(({ sender, receiver, amount}, index) =>
               <li key={`transaction-${index}`}>
-                <span>{sender}가 {receiver}에게 {getDescriptiveAmount(currency, amount)} 보내기</span>
+                <span>{sender} → {receiver} : {getDescriptiveAmount(currency, amount)}</span>
               </li>
             )}
           </StyledUl>
@@ -145,7 +145,7 @@ const StyledButton = styled(Button)`
   }
 `
 const StyledWrapper = styled.div`
-  padding: 50px;
+  padding: 40px;
   background-color: #683BA1;
   color: #FFFBFB;
   box-shadow: 3px 0px 4px rgba(0, 0, 0, 0.25);
