@@ -14,7 +14,7 @@ export const AddExpenseForm = () => {
   const today = new Date()
   const [date, setDate] = useState([today.getFullYear(), today.getMonth() + 1, `0${today.getDate()}`.slice(-2)].join("-"))
   const [desc, setDesc] = useState('')
-  const [amount,setAmount] = useState(0)
+  const [amount, setAmount] = useState(undefined)
   const [payer, setPayer] = useState(null)
   const [validated, setValidated] = useState(false)
 
@@ -27,7 +27,7 @@ export const AddExpenseForm = () => {
   const checkValidity = () => {
     const descValid = desc.length > 0
     const payerValid = payer !== null
-    const amountValid = amount > 0
+    const amountValid = !!amount && amount > 0
 
     setIsDescValid(descValid)
     setIsPayerValid(payerValid)
