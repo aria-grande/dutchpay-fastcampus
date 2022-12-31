@@ -1,9 +1,9 @@
-import { render, screen, within } from "@testing-library/react"
+import { render, screen, waitFor, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { RecoilRoot } from "recoil"
 import { groupMembersState } from "../state/groupMembers"
 import { ExpenseMain } from "./ExpenseMain"
-
+import { API } from "aws-amplify"
 
 const renderComponent = () => {
   render(
@@ -39,6 +39,13 @@ const renderComponent = () => {
 }
 
 describe('비용 정산 메인 페이지', () => {
+  beforeEach(() => {
+    // API.put을 mocking 함으로써, 실제 네트워크 리퀘스트를 보내지 않고 성공 응답이 온 것처럼 acting 해야
+    // 프론트 엔드가 의도한 대로 동작하는지 테스트 할 수 있기 때문
+    API.put = jest.fn().mockResolvedValue({"data": {}})
+    console.error = jest.fn()
+  })
+
   describe('비용 추가 컴포넌트', () => {
     test('비용 추가 컴포넌트 렌더링', () => {
       const {dateInput, descInput, amountInput, payerInput, addButton} = renderComponent()
@@ -54,9 +61,11 @@ describe('비용 정산 메인 페이지', () => {
       const {addButton, descErrorMessage, payerErrorMessage, amountErrorMessage} = renderComponent()
 
       expect(addButton).toBeInTheDocument()
-      await userEvent.click(addButton)
+      userEvent.click(addButton)
 
-      expect(descErrorMessage).toHaveAttribute('data-valid', 'false')
+      await waitFor(() => {
+        expect(descErrorMessage).toHaveAttribute('data-valid', 'false')
+      })
       expect(payerErrorMessage).toHaveAttribute('data-valid', 'false')
       expect(amountErrorMessage).toHaveAttribute('data-valid', 'false')
     })
@@ -65,12 +74,14 @@ describe('비용 정산 메인 페이지', () => {
       const {descInput, amountInput, payerInput, addButton,
         descErrorMessage, payerErrorMessage, amountErrorMessage} = renderComponent()
 
-      await userEvent.type(descInput, '장보기')
-      await userEvent.type(amountInput, '30000')
-      await userEvent.selectOptions(payerInput, '영수')
-      await userEvent.click(addButton)
+      userEvent.type(descInput, '장보기')
+      userEvent.type(amountInput, '30000')
+      userEvent.selectOptions(payerInput, '영수')
+      userEvent.click(addButton)
 
-      expect(descErrorMessage).toHaveAttribute('data-valid', 'true')
+      await waitFor(() => {
+        expect(descErrorMessage).toHaveAttribute('data-valid', 'true')
+      })
       expect(payerErrorMessage).toHaveAttribute('data-valid', 'true')
       expect(amountErrorMessage).toHaveAttribute('data-valid', 'true')
     })
@@ -95,23 +106,25 @@ describe('비용 정산 메인 페이지', () => {
   })
 
   describe('새로운 비용이 입력 되었을 때,', () => {
-    const addNewExpense = async () => {
+    const addNewExpense = () => {
       const {dateInput, descInput, payerInput, amountInput, addButton} = renderComponent()
-      await userEvent.type(dateInput, '2022-10-10')
-      await userEvent.type(descInput, '장보기')
-      await userEvent.type(amountInput, '30000')
-      await userEvent.selectOptions(payerInput, '영수')
-      await userEvent.click(addButton)
+      userEvent.type(dateInput, '2022-10-10')
+      userEvent.type(descInput, '장보기')
+      userEvent.type(amountInput, '30000')
+      userEvent.selectOptions(payerInput, '영수')
+      userEvent.click(addButton)
     }
 
-    beforeEach(async () => {
-      await addNewExpense()
+    beforeEach(() => {
+      addNewExpense()
     })
 
-    test('날짜, 내용, 결제자, 금액 데이터가 정산 리스트에 추가 된다', () => {
+    test('날짜, 내용, 결제자, 금액 데이터가 정산 리스트에 추가 된다', async () => {
       const expenseListComponent = screen.getByTestId('expenseList')
       const dateValue = within(expenseListComponent).getByText('2022-10-10')
-      expect(dateValue).toBeInTheDocument()
+      await waitFor(() => {
+        expect(dateValue).toBeInTheDocument()
+      })
 
       const descValue = within(expenseListComponent).getByText('장보기')
       expect(descValue).toBeInTheDocument()
@@ -123,11 +136,13 @@ describe('비용 정산 메인 페이지', () => {
       expect(amountValue).toBeInTheDocument()
     })
 
-    test('정산 결과 또한 업데이트가 된다.', () => {
+    test('정산 결과 또한 업데이트가 된다.', async () => {
       const totalText = screen.getByText(/2 명이서 총 30000 원 지출/i)
-      expect(totalText).toBeInTheDocument()
+      await waitFor(() => {
+        expect(totalText).toBeInTheDocument()
+      })
 
-      const transactionText = screen.getByText(/영희가 영수에게 15000 원 보내기/i)
+      const transactionText = screen.getByText(/영희 → 영수 : 15000 원/i)
       expect(transactionText).toBeInTheDocument()
     })
 
@@ -136,10 +151,14 @@ describe('비용 정산 메인 페이지', () => {
       const spiedToPng = jest.spyOn(htmlToImage, 'toPng')
 
       const downloadBtn = screen.getByTestId("btn-download")
-      expect(downloadBtn).toBeInTheDocument()
+      await waitFor(() => {
+        expect(downloadBtn).toBeInTheDocument()
+      })
 
-      await userEvent.click(downloadBtn)
-      expect(spiedToPng).toHaveBeenCalledTimes(1)
+      userEvent.click(downloadBtn)
+      await waitFor(() => {
+        expect(spiedToPng).toHaveBeenCalledTimes(1)
+      })
     })
 
     afterEach(() => {
@@ -154,32 +173,37 @@ describe('비용 정산 메인 페이지', () => {
     })
 
     describe('공유 버튼 클릭시', () => {
-      describe('모바일에서', () => {
-        beforeEach(() => {
-          global.navigator.share = jest.fn()
-          Object.defineProperty(window.navigator, 'userAgent', { value: 'iPhone'})
-        })
+      let userAgent = jest.spyOn(window.navigator, 'userAgent', 'get')
 
+      describe('모바일에서', () => {
+        beforeAll(() => {
+          global.navigator.share = jest.fn()
+          userAgent.mockReturnValue('iPhone')
+        })
         test('공유용 다이얼로그가 뜬다', async () => {
           const { shareButton } = renderComponent()
 
-          await userEvent.click(shareButton)
+          userEvent.click(shareButton)
 
-          expect(navigator.share).toBeCalledTimes(1)
+          await waitFor(() => {
+            expect(navigator.share).toBeCalledTimes(1)
+          })
         })
       })
 
       describe('데스크톱에서', () => {
-        beforeEach(() => {
+        beforeAll(() => {
+          userAgent.mockReturnValue('Mozilla/5.0 Chrome/108.0.0.0 Safari/537.36')
           global.navigator.clipboard = {
             writeText: () => new Promise(jest.fn())
           }
         })
+
         test('클립보드에 링크가 복사된다', async () => {
           const writeText = jest.spyOn(navigator.clipboard, 'writeText')
           const { shareButton } = renderComponent()
 
-          await userEvent.click(shareButton)
+          userEvent.click(shareButton)
 
           expect(writeText).toBeCalledTimes(1)
           expect(writeText).toHaveBeenCalledWith(window.location.href)
