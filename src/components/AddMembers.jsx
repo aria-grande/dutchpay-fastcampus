@@ -34,7 +34,7 @@ export const AddMembers = () => {
   const handleSubmit = (event) => {
     event.preventDefault()
     setValidated(true)
-    if (groupMembers.length > 0) {
+    if (groupMembers && groupMembers.length > 0) {
       saveGroupMembers()
       navigate(ROUTE_UTILS.EXPENSE_MAIN(groupId))
     } else if (isSamsungInternet && groupMembersString.length > 0) {

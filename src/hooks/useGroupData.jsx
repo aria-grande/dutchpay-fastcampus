@@ -22,7 +22,7 @@ export const useGroupData = () => {
         setGroupName(data.groupName)
         setGroupId(data.guid)
         setCurrencyCode(data.currencyCode)
-        setMembers(data.members)
+        setMembers(data.members || [])
         setExpenses(data.expenses || [])
       })
       .catch(error => {
