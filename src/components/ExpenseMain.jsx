@@ -95,19 +95,19 @@ const StyledShareButton = styled.div`
   }
 `
 const StyledGroupName = styled.h2`
-  margin-bottom: 80px;
+  margin-bottom: 6vh;
   font-weight: 700;
-  font-size: 45px;
-  line-height: 45px;
+  font-size: 40px;
+  line-height: 40px;
   text-align: center;
   @media screen and (max-width: 600px) {
-    font-size: 10vw;
+    font-size: 9vw;
     margin-bottom: 30px;
   }
 `
 
 const StyledRightPaneWrapper = styled(Container)`
-  padding: 100px 31px 100px 31px;
+  padding: 5vh 2vw 2vh 2vw;
 
   @media screen and (max-width: 600px) {
     padding: 50px 25px;
@@ -115,8 +115,8 @@ const StyledRightPaneWrapper = styled(Container)`
 `
 
 const StyledGapRow = styled(Row)`
-  gap: 5vh;
-  padding-top: 100px;
+  gap: 3vh;
+  padding-top: 4vh;
   justify-content: center;
 
   @media screen and (max-width: 600px) {

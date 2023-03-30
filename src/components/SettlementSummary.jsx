@@ -111,13 +111,13 @@ export const SettlementSummary = () => {
           <StyledSummary>
             <span>{groupMembersCount} 명이서 총 {getDescriptiveAmount(currency, totalExpenseAmount)} 지출</span>
             <br/>
-            <span>한 사람 당 {getDescriptiveAmount(currency, splitAmount)}</span>
+            <span>한 사람 당 {getDescriptiveAmount(currency, splitAmount.toFixed(2))}</span>
           </StyledSummary>
 
           <StyledUl>
             {minimumTransaction.map(({ sender, receiver, amount}, index) =>
               <li key={`transaction-${index}`}>
-                <span>{sender} → {receiver} : {getDescriptiveAmount(currency, amount)}</span>
+                <span>{sender} → {receiver} : {getDescriptiveAmount(currency, amount.toFixed(2))}</span>
               </li>
             )}
           </StyledUl>
@@ -135,7 +135,7 @@ const StyledButton = styled(Button)`
   border: none;
   font-size: 25px;
   position: absolute;
-  top: 15px;
+  bottom: 15px;
   right: 15px;
 
   &:hover, &:active {
@@ -144,20 +144,26 @@ const StyledButton = styled(Button)`
   }
 `
 const StyledWrapper = styled.div`
-  padding: 40px;
+  padding: 1.5em;
   background-color: #683BA1;
   color: #FFFBFB;
   box-shadow: 3px 0px 4px rgba(0, 0, 0, 0.25);
   border-radius: 15px;
   text-align: center;
-  font-size: 22px;
+  font-size: 20px;
   position: relative;
+
+  @media screen and (max-width: 600px) {
+    font-size: 4vw;
+    line-height: 6vw;
+  }
 `
 
 const StyledUl = styled.ul`
-  margin-top: 31px;
+  margin-top: 1em;
   font-weight: 600;
   line-height: 200%;
+  text-align: left;
 
   list-style-type: disclosure-closed;
   li::marker {
@@ -172,5 +178,5 @@ const StyledUl = styled.ul`
 `
 
 const StyledSummary = styled.div`
-  margin-top: 31px;
+  margin-top: 1em;
 `

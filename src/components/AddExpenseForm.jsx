@@ -112,10 +112,11 @@ export const AddExpenseForm = () => {
                 type="number"
                 step="0.01"
                 placeholder="비용은 얼마였나요?"
+                min="0"
                 value={amount}
                 isInvalid={!isAmountValid && validated}
                 isValid={isAmountValid}
-                onChange={({target}) => setAmount(target.value || 0)}
+                onChange={({target}) => setAmount(target.value)}
               />
               <Form.Control.Feedback
                 data-valid={isAmountValid}
@@ -171,7 +172,7 @@ const StyledFormGroup = styled(Form.Group)`
     border-radius: 8px;
     border: 0;
     color: #F8F9FA;
-    height: 45px;
+    height: 40px;
 
     &:focus {
       color: #F8F9FA;
@@ -188,19 +189,19 @@ export const StyledTitle = styled.h3`
   color: #FFFBFB;
   text-align: center;
   font-weight: 700;
-  font-size: 35px;
-  line-height: 48px;
+  font-size: 25px;
+  line-height: 30px;
   letter-spacing: 0.25px;
   margin-bottom: 15px;
   @media screen and (max-width: 600px) {
-    font-size: 8vw;
+    font-size: 5.5vw;
+    line-height: 6vw;
   }
 `
 const StyledSubmitButton = styled(Button).attrs({
   type: 'submit'
 })`
-  height: 60px;
-  padding: 16px 32px;
+  height: 45px;
   border: 0px;
   border-radius: 8px;
   background-color: #E2D9F3;
