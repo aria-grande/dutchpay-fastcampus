@@ -25,8 +25,7 @@ export const CurrencySetter = () => {
 
   return (
     <div>
-      <label>결제 통화</label>
-{curCode}
+      <label>결제 통화 설정</label>
       <Form.Select
         value={curCode}
         onChange={handleCurrencySelected}
