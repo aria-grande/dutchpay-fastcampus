@@ -27,11 +27,12 @@ export const CurrencySetter = () => {
     <div>
       <label>결제 통화 설정</label>
       <Form.Select
-        value={curCode}
-        onChange={handleCurrencySelected}
-        className="form-control"
+          defaultValue="default"
+          value={curCode}
+          onChange={handleCurrencySelected}
+          className="form-control"
       >
-        <option selected={curCode === undefined} disabled>결제 통화를 선택해 주세요</option>
+        <option disabled value="default">결제 통화를 선택해 주세요</option>
         { supportedCurrencies && Object.keys(supportedCurrencies).map((code) =>
           <option key={code} value={code}>{supportedCurrencies[code].label}</option>
         )}
