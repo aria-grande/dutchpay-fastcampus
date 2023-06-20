@@ -1,27 +1,28 @@
 export type AmplifyDependentResourcesAttributes = {
-    "storage": {
-        "groups": {
-            "Name": "string",
-            "Arn": "string",
-            "StreamArn": "string",
-            "PartitionKeyName": "string",
-            "PartitionKeyType": "string",
-            "Region": "string"
-        }
-    },
-    "function": {
-        "groupsLambda": {
-            "Name": "string",
-            "Arn": "string",
-            "Region": "string",
-            "LambdaExecutionRole": "string"
-        }
-    },
-    "api": {
-        "groupsApi": {
-            "RootUrl": "string",
-            "ApiName": "string",
-            "ApiId": "string"
-        }
+  "api": {
+    "groupsApi": {
+      "ApiId": "string",
+      "ApiName": "string",
+      "RootUrl": "string"
     }
+  },
+  "function": {
+    "groupsLambda": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    }
+  },
+  "storage": {
+    "groups": {
+      "Arn": "string",
+      "Name": "string",
+      "PartitionKeyName": "string",
+      "PartitionKeyType": "string",
+      "Region": "string",
+      "StreamArn": "string"
+    }
+  }
 }

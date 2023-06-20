@@ -1,45 +1,63 @@
 {
-  "storage": {
-    "groups": {
-      "service": "DynamoDB",
-      "providerPlugin": "awscloudformation"
+  "api": {
+    "groupsApi": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "groupsLambda"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
     }
   },
   "function": {
     "groupsLambda": {
       "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
       "dependsOn": [
         {
-          "category": "storage",
-          "resourceName": "groups",
+          "attributeEnvMap": {
+            "Arn": "TABLE_ARN",
+            "Name": "TABLE_NAME"
+          },
           "attributes": [
             "Name",
             "Arn"
           ],
-          "attributeEnvMap": {
-            "Name": "TABLE_NAME",
-            "Arn": "TABLE_ARN"
-          }
+          "category": "storage",
+          "resourceName": "groups"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_groupsLambda_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "groupsLambda"
+        }
+      ]
+    },
+    "AMPLIFY_function_groupsLambda_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "groupsLambda"
         }
       ]
     }
   },
-  "api": {
-    "groupsApi": {
-      "service": "API Gateway",
+  "storage": {
+    "groups": {
       "providerPlugin": "awscloudformation",
-      "dependsOn": [
-        {
-          "category": "function",
-          "resourceName": "groupsLambda",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
-        }
-      ]
+      "service": "DynamoDB"
     }
   }
 }

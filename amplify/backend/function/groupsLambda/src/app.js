@@ -137,6 +137,44 @@ app.put(`${path}${hashKeyPath}/expenses`, function (req, res) {
 })
 
 /************************************
+ * HTTP put method for replacing the entire expenses to the group - 전체 비용 업데이트 API *
+ *************************************/
+app.put(`${path}${hashKeyPath}/expenses/replace`, function (req, res) {
+  const guid = req.params[partitionKeyName]
+  const { expenses } = req.body
+
+  if (
+      !expenses || expenses.length === 0
+  ) {
+    res.statusCode = 400
+    res.json({ error: "Invalid expenses object" })
+    return
+  }
+
+  let updateItemParams = {
+    TableName: tableName,
+    Key: {
+      [partitionKeyName]: guid,
+    },
+    UpdateExpression:
+        "SET expenses = :vals",
+    ExpressionAttributeValues: {
+      ":vals": expenses,
+    },
+  }
+
+  dynamodb.update(updateItemParams, (err, data) => {
+    if (err) {
+      res.statusCode = 500
+      res.json({ error: err })
+    } else {
+      res.statusCode = 200
+      res.json({ data: data })
+    }
+  })
+})
+
+/************************************
  * HTTP put method for adding members to the group - 멤버 추가 API *
  *************************************/
 app.put(`${path}${hashKeyPath}/members`, function (req, res) {
