@@ -77,7 +77,7 @@ export const SettlementSummary = () => {
   const members = useRecoilValue(groupMembersState)
   const currency = useRecoilValue(currencyState)
 
-  const totalExpenseAmount = parseInt(expenses.reduce((prevAmount, curExpense) => prevAmount + parseInt(curExpense.amount), 0))
+  const totalExpenseAmount = parseFloat(expenses.reduce((prevAmount, curExpense) => prevAmount + parseFloat(curExpense.amount), 0)).toFixed(2)
   const groupMembersCount = members ? members.length : 0
   const splitAmount = totalExpenseAmount / groupMembersCount
 
